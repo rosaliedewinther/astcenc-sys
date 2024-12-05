@@ -1,7 +1,7 @@
 use std::{env, path};
 
 fn main() {
-    let out_path = path::PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    let out_path = path::PathBuf::from("src/");
 
     let include_paths = match pkg_config::Config::new().probe("astc-encoder") {
         Ok(astcenc) => {
@@ -58,14 +58,14 @@ fn main() {
 
     let mut bindings = bindgen::Builder::default()
         .clang_arg("-xc++")
-        .header("wrapper.h")
+        .header("astc-encoder/Source/astcenc.h")
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .derive_partialeq(true)
         .derive_eq(true)
         .derive_hash(true)
         .derive_debug(true)
         // Bypasses an issue with bindgen that makes it generate invalid Rust code.
-        .blocklist_item("std::value");
+        .allowlist_file("astc-encoder/Source/astcenc.h");
 
     for path in include_paths {
         bindings = bindings.clang_args(&["-F", &path]);
