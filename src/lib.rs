@@ -3,5 +3,4 @@
 #![allow(non_snake_case)]
 #![allow(improper_ctypes)]
 
-mod bindings;
-pub use bindings::*;
+include!("bindgen.rs");
